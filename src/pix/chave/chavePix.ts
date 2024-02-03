@@ -7,30 +7,38 @@ export type ChavePixProps = {
  * @class ChavePix
  * @classdesc Base class that guarantees basic validation premisses.
  * See https://www.bcb.gov.br/content/estabilidadefinanceira/pix/Regulamento_Pix/X_ManualOperacionaldoDICT.pdf#page=14
+ * Should be extended and implemented by specific Chave pix types
  *
  * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
  */
-export abstract class ChavePix {
+export class ChavePix {
 
   value: string
   /**
    * Chave pix constructor. Should be only be called by create method, thus, ensuring validation
    * */
-  private constructor (props:ChavePixProps) {
+  constructor (props:ChavePixProps) {
     this.value = props.value
   }
 
   /*
   * Perfoms general validation on pix key.
+  *
+  * Returns a space removed string
   * */
-  private validate(props: ChavePixProps): void {
+   static validate(props: ChavePixProps): void {
     
-    if (typeof props.value === 'undefined'){
+
+    if (!props || typeof props?.value === 'undefined'){
       throw new Error("The chave pix cannot be undefined")
+    }
+    
+    if (typeof props.value !== 'string') {
+      throw new Error("The chave pix cannot be a non-string")
     }
 
     //Ensures that chave pix is between 1 and 77 chars. note: Bacen specification
-    if (props.value.length > 0 && props.value.length <= 77) {
+    if (props.value.length < 1 || props.value.length >  77) {
       throw new Error("The chave pix must be between 1 and 77 chars.")
     }
 
@@ -39,10 +47,8 @@ export abstract class ChavePix {
   /**
    * Performs domain specific validation on pix key. (ex: Ensure that email is valid, etc.)
    * */
-  abstract domainSpecificValidation(props: ChavePixProps) : void
 
   /**
    * Method to be called to create a pix key. SHOULD perform validation using validate and domainSpecificValidation.
    * */
-  abstract create(props:ChavePixProps):void
 }
