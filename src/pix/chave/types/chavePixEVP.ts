@@ -1,4 +1,5 @@
 import { ChavePix, ChavePixProps } from "../chavePix";
+import { CHAVE_PIX_TYPES } from "../chavePixUtils";
 
 /**
  * 
@@ -7,17 +8,20 @@ import { ChavePix, ChavePixProps } from "../chavePix";
  *
  * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
  */
-export class ChavePixEVP extends ChavePix {
+export class ChavePixEVP implements ChavePix {
 
+  value: string;
+  type = CHAVE_PIX_TYPES.EVP;
   //EVP validation regex. Note: Bacen's documentation show's incomplete regex.
   static EVP_PATTERN = new RegExp(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)
 
   /**
    * @param {ChavePixProps} props 
-   * Requires user to use validated create method
+   * Create validated EVP key
    */
-  private constructor(props: ChavePixProps) {
-    super(props)
+  constructor(props: ChavePixProps) {
+    const validatedProps = ChavePixEVP.validate(props)
+    this.value = validatedProps.value
   }
 
   /**
@@ -26,13 +30,10 @@ export class ChavePixEVP extends ChavePix {
    *
    * Applies domain specific validation to input
    */
-  private static domainSpecificValidation(props: ChavePixProps): ChavePixProps {
+  private static validate(props: ChavePixProps): ChavePixProps {
 
     // Strip all spaces
     const treatedValue = props.value.replace(/\s/g, '')
-
-    //Aplly genreal validation
-    this.validate({value: treatedValue})
 
     // Check pattern according to DICT's regulations
     const regexCheck = this.EVP_PATTERN.test(treatedValue)
@@ -44,17 +45,5 @@ export class ChavePixEVP extends ChavePix {
     return {value: treatedValue}
   }
 
-  /**
-   * @param {ChavePixProps} props 
-   * @returns {ChavePixEVP}
-   *
-   * Creates chave pix EVP, with validation input
-   */
-  public static create(props: ChavePixProps): ChavePixEVP {
-
-    //Apply validation logic
-    const treatedProps = this.domainSpecificValidation(props)
-    return new ChavePixEVP(treatedProps)
-  }
 
 }

@@ -1,4 +1,5 @@
 import { ChavePix, ChavePixProps } from "../chavePix";
+import { CHAVE_PIX_TYPES } from "../chavePixUtils";
 
 /**
  * 
@@ -7,29 +8,29 @@ import { ChavePix, ChavePixProps } from "../chavePix";
  *
  * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
  */
-export class ChavePixPhone extends ChavePix {
+export class ChavePixPhone implements ChavePix {
   
+  value: string;
+  type = CHAVE_PIX_TYPES.PHONE
+
   //According https://www.bcb.gov.br/content/estabilidadefinanceira/pix/API-DICT.html#tag/Key
-  static E164_PATTERN = new RegExp(/^\+[1-9][0-9]\d{1,14}$/)
+  static E164_PATTERN = new RegExp(/^\+[1-9]\d{6,12}$/)
 
   /**
-   * Ensures that Chave pix is created by create method
+   * Creates validated phone chave pix 
    */
-  private constructor(props: ChavePixProps){
-    super(props)
+  constructor(props: ChavePixProps){
+    const validatedProps = ChavePixPhone.validate(props)
+    this.value = validatedProps.value
   }
 
   /**
    * Apply domain specific validation
    */
-  private static domainSpecificValidation(props: ChavePixProps): ChavePixProps {
+  private static validate(props: ChavePixProps): ChavePixProps {
 
     //Replace all non numeric values, and adds + att the beggining of the number
     const treatedValue = "+" + props.value.replace(/\D/g, "")
-
-    this.validate({value: treatedValue}) // General validation
-
-    
     const regexResult = this.E164_PATTERN.test(treatedValue)
 
     if (!regexResult) {
@@ -38,15 +39,6 @@ export class ChavePixPhone extends ChavePix {
 
 
     return {value: treatedValue}
-  }
-  /**
-   * Create Chave Pix Phone with validation
-   * */
-  static create(props: ChavePixProps): ChavePixPhone {
-    //Apply validation
-    const treatedProps = this.domainSpecificValidation(props)
-
-    return new ChavePixPhone(treatedProps)
   }
 
 }

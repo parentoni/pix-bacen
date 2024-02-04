@@ -1,5 +1,7 @@
+import { CHAVE_PIX_TYPES } from "./chavePixUtils"
+
 export type ChavePixProps = {
-  value: string
+  value:string
 }
 
 /**
@@ -11,43 +13,8 @@ export type ChavePixProps = {
  *
  * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
  */
-export class ChavePix {
+export abstract class ChavePix {
 
-  value: string
-  /**
-   * Chave pix constructor. Should be only be called by create method, thus, ensuring validation
-   * */
-  constructor (props:ChavePixProps) {
-    this.value = props.value
-  }
-
-  /*
-  * Perfoms general validation on pix key.
-  *
-  * Returns a space removed string
-  * */
-  static validate(props: ChavePixProps): void {
-
-    if (!props || typeof props?.value === 'undefined'){
-      throw new Error("The chave pix cannot be undefined")
-    }
-
-    if (typeof props.value !== 'string') {
-      throw new Error("The chave pix cannot be a non-string")
-    }
-
-    //Ensures that chave pix is between 1 and 77 chars. note: Bacen specification
-    if (props.value.length < 1 || props.value.length >  77) {
-      throw new Error("The chave pix must be between 1 and 77 chars.")
-    }
-
-  }
-
-  /**
-   * Performs domain specific validation on pix key. (ex: Ensure that email is valid, etc.)
-   * */
-
-  /**
-   * Method to be called to create a pix key. SHOULD perform validation using validate and domainSpecificValidation.
-   * */
+  abstract value: string // Value of the chave
+  abstract type: CHAVE_PIX_TYPES // Type of the cgave
 }
