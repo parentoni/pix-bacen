@@ -1,4 +1,4 @@
-import { ChavePixCPF } from "../../../../src/pix/chave/types/chavePixCpf";
+import { ChavePixCPF } from "../../../../src/pix/chave/types/chavePixCPF";
 
 describe("CPF chave pix", () => {
   test("It should fail to create with invalid cpf", () => {

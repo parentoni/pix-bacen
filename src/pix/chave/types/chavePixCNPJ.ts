@@ -2,15 +2,15 @@ import { ChavePix, ChavePixProps } from "../chavePix";
 
 /**
  * 
- * @class ChavePixCPF
- * @classdesc Implements CPF chave pix, validates based on https://www.bcb.gov.br/content/estabilidadefinanceira/pix/API-DICT.html#tag/Key cpf regex
+ * @class ChavePixCNPJ
+ * @classdesc Implements CNPJ chave pix, validates based on https://www.bcb.gov.br/content/estabilidadefinanceira/pix/API-DICT.html#tag/Key CNPJ regex
  *
  * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
  */
-export class ChavePixCPF extends ChavePix {
+export class ChavePixCNPJ extends ChavePix {
 
-  //Cpf validation regex
-  static CPF_PATTERN = new RegExp(/^[0-9]{11}$/)
+  //CNPJ validation regex
+  static CNPJ_PATTERN = new RegExp(/^[0-9]{14}$/)
 
   /**
    * @param {ChavePixProps} props 
@@ -35,10 +35,10 @@ export class ChavePixCPF extends ChavePix {
     this.validate({value: treatedValue})
 
     // Check pattern according to DICT's regulations
-    const regexCheck = this.CPF_PATTERN.test(treatedValue)
+    const regexCheck = this.CNPJ_PATTERN.test(treatedValue)
 
     if (!regexCheck) {
-      throw new Error("Given cpf isn't vallid.")
+      throw new Error("Given CNPJ isn't vallid.")
     }
 
     return {value: treatedValue}
@@ -46,15 +46,15 @@ export class ChavePixCPF extends ChavePix {
 
   /**
    * @param {ChavePixProps} props 
-   * @returns {ChavePixCPF}
+   * @returns {ChavePixCNPJ}
    *
-   * Creates chave pix cpf, with validation input
+   * Creates chave pix CNPJ, with validation input
    */
-  public static create(props: ChavePixProps): ChavePixCPF {
+  public static create(props: ChavePixProps): ChavePixCNPJ {
 
     //Apply validation logic
     const treatedProps = this.domainSpecificValidation(props)
-    return new ChavePixCPF(treatedProps)
+    return new ChavePixCNPJ(treatedProps)
   }
 
 }
