@@ -8,8 +8,9 @@ import { ChavePix, ChavePixProps } from "../chavePix";
  * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
  */
 export class ChavePixPhone extends ChavePix {
-
-  static E164_PATTERN = new RegExp(/^\+[1-9]\d{1,14}$/)
+  
+  //According https://www.bcb.gov.br/content/estabilidadefinanceira/pix/API-DICT.html#tag/Key
+  static E164_PATTERN = new RegExp(/^\+[1-9][0-9]\d{1,14}$/)
 
   /**
    * Ensures that Chave pix is created by create method
@@ -23,15 +24,16 @@ export class ChavePixPhone extends ChavePix {
    */
   private static domainSpecificValidation(props: ChavePixProps): ChavePixProps {
 
-    this.validate(props) // General validation
-
     //Replace all non numeric values, and adds + att the beggining of the number
     const treatedValue = "+" + props.value.replace(/\D/g, "")
 
+    this.validate({value: treatedValue}) // General validation
+
+    
     const regexResult = this.E164_PATTERN.test(treatedValue)
 
     if (!regexResult) {
-      throw new Error("Chave pix of type phone is invalid")
+      throw new Error(`Chave pix of type phone is invalid ${treatedValue}`)
     }
 
 

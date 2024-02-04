@@ -8,8 +8,8 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "lint": "tsc",
-    "test": "jest",
-    "coverage": "jest --coverage --detectOpenHandles --forceExit"
+    "test": "jest --no-cache",
+    "coverage": "jest --coverage --detectOpenHandles --forceExit --no-cache"
   },
   "keywords": [],
   "author": "",
