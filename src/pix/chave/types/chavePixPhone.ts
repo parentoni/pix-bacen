@@ -9,7 +9,6 @@ import { ChavePix, ChavePixProps } from "../chavePix";
  */
 export class ChavePixPhone extends ChavePix {
 
-  // regex e.164 pattern
   static E164_PATTERN = new RegExp(/^\+[1-9]\d{1,14}$/)
 
   /**
@@ -19,7 +18,9 @@ export class ChavePixPhone extends ChavePix {
     super(props)
   }
 
-  // Apply phone number specific validation
+  /**
+   * Apply domain specific validation
+   */
   private static domainSpecificValidation(props: ChavePixProps): ChavePixProps {
 
     this.validate(props) // General validation
@@ -36,8 +37,9 @@ export class ChavePixPhone extends ChavePix {
 
     return {value: treatedValue}
   }
-
-  //Create Chave Pix Phone with validation
+  /**
+   * Create Chave Pix Phone with validation
+   * */
   static create(props: ChavePixProps): ChavePixPhone {
     //Apply validation
     const treatedProps = this.domainSpecificValidation(props)
